@@ -288,6 +288,24 @@ public class TransactionOperationsImpl implements TransactionOperations {
 		
 	}
 
+	@Override
+	public boolean deleteTransaction(String TransId) {
+		// TODO Auto-generated method stub
+		String DELETETRANSACTION="DELETE FROM TRANSACTION WHERE TransId=?";
+		
+		Connection con= MyConnection.openConnection();
+		try {
+			PreparedStatement ps= con.prepareStatement(DELETETRANSACTION);
+			ps.setString(1, TransId);
+			 ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+
 
 	
 
