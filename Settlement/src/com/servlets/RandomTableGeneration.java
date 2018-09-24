@@ -57,6 +57,7 @@ public class RandomTableGeneration extends HttpServlet {
 		   int index2= rnum.nextInt(clmembers.length);
 		   String sellclmember= clmembers[index2];
 		   System.out.println("Selling clearing member: "+ sellclmember);
+		   System.out.println("abhi");
 		   if(index1==index2)
 			   continue;
 		   else {
