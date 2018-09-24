@@ -262,6 +262,32 @@ public class TransactionOperationsImpl implements TransactionOperations {
 		
 	}
 
+	@Override
+	public void addTransaction(Transaction transaction) {
+		// TODO Auto-generated method stub
+	
+		String ADDTRANSACTION = "Insert into TRANSACTION values(?,?,?,?,?,?)";
+
+		try {
+			Connection con = MyConnection.openConnection();
+
+			PreparedStatement ps = con.prepareStatement(ADDTRANSACTION);
+			ps.setString(1, transaction.getTransId());
+			ps.setString(2, transaction.getSecurityId());
+			ps.setInt(3, transaction.getQuantity());
+			ps.setFloat(4, transaction.getPrice());
+			ps.setString(5, transaction.getBuyerCompId());
+			ps.setString(6, transaction.getSellerCompId());
+			 ps.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+		}
+		
+		
+	}
+
 
 	
 
