@@ -46,6 +46,7 @@ public class UpdateTransactionServlet extends HttpServlet {
 		dao.updateTransaction(transaction);
 		List<Transaction> list = dao.findAll();
 		request.setAttribute("transactions", list);
+		System.out.println("fajisd");
 		RequestDispatcher dispatcher1 = request.getRequestDispatcher("show_jstl.jsp");
 		dispatcher1.forward(request, response);
 	}
