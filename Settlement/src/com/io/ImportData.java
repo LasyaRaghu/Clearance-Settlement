@@ -19,7 +19,7 @@ public class ImportData {
 		// TODO Auto-generated method stub
 		try(Connection con =MyConnection.openConnection();) {
 			             PreparedStatement pstm = null ;
-			             FileInputStream input = new FileInputStream("C:\\Users\\Grad57\\Downloads\\trade.xlsx");
+			             FileInputStream input = new FileInputStream("C:\\Users\\Grad57\\Downloads\\trade.xls");
 			             POIFSFileSystem fs = new POIFSFileSystem( input );
 			             HSSFWorkbook wb = new HSSFWorkbook(fs);
 			             HSSFSheet sheet = wb.getSheetAt(0);
@@ -28,12 +28,12 @@ public class ImportData {
 			                 row = sheet.getRow(i);
 			                // int transId = (int) row.getCell(0).getNumericCellValue();
 			                 String transId = row.getCell(0).getStringCellValue();
-			                 String buyerCompId = row.getCell(1).getStringCellValue();
-			                 String securityId = row.getCell(3).getStringCellValue();
-			                 String sellerCompId = row.getCell(4).getStringCellValue();
-			                 int quantity = (int)row.getCell(5).getNumericCellValue();
-			                 float price=(float)row.getCell(6).getNumericCellValue();
-			                 String sql = "INSERT INTO tablename VALUES('"+transId+"','"+buyerCompId+"','"+securityId+"','"+sellerCompId+"','"+quantity+"','"+price+"')";
+			                 String buyerCompId = row.getCell(4).getStringCellValue();
+			                 String securityId = row.getCell(1).getStringCellValue();
+			                 String sellerCompId = row.getCell(5).getStringCellValue();
+			                 int quantity = (int)row.getCell(2).getNumericCellValue();
+			                 float price=(float)row.getCell(3).getNumericCellValue();
+			                 String sql = "INSERT INTO Transactions VALUES('"+transId+"','"+buyerCompId+"','"+securityId+"','"+sellerCompId+"','"+quantity+"','"+price+"')";
 			                 pstm = (PreparedStatement) con.prepareStatement(sql);
 			                 pstm.execute();
 			                 System.out.println("Import rows "+i);

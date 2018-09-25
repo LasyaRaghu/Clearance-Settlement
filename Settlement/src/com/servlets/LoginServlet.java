@@ -8,8 +8,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import com.operations.CompanyOperations;
 import com.operations.TransactionOperations;
+import com.operations.impl.CompanyOperationsImpl;
 import com.operations.impl.TransactionOperationsImpl;
 
 /**
@@ -38,6 +41,16 @@ public class LoginServlet extends HttpServlet {
 		Boolean result=top.Login(name, password);
 		if(!result)
 			writer.println("enter correct credentials");
+		else if(name.equals("Admin")&& password.equals("Admin123")) {
+			//RequestDispatcher to admin.jsp		
+		}
+		else {
+			CompanyOperations cop = new CompanyOperationsImpl();
+			String companyId=cop.getCompanyId(name);
+			HttpSession session = request.getSession();
+			session.setAttribute("name",companyId);
+			//RequestDispatcher to companies.jsp
+		}
 	}
 
 }
