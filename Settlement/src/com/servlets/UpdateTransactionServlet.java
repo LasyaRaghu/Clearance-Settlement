@@ -35,18 +35,17 @@ public class UpdateTransactionServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		int transId=  (int) request.getAttribute("transId");
-		String buyerID=  (String) request.getAttribute("buyerID");
-		String Security =  (String) request.getAttribute("Security");
-		String SellerID =   (String) request.getAttribute("SellerID");
-		int Quantity=  (int) request.getAttribute("Quantity");
-		float price= (float) request.getAttribute("price");
+		int transId=  Integer.parseInt(request.getParameter("transId"));
+		String buyerID=   request.getParameter(("buyclearingmember"));
+		String Security = request.getParameter(("security"));
+		String SellerID =  request.getParameter(("sellclearingmember"));
+		int Quantity=   Integer.parseInt(request.getParameter("quantity"));
+		float price= Float.parseFloat(request.getParameter("price"));
 		Transaction transaction = new Transaction( transId, buyerID, Security, SellerID, Quantity, price);
 		TransactionOperations dao= new TransactionOperationsImpl();
 		dao.updateTransaction(transaction);
 		List<Transaction> list = dao.findAll();
 		request.setAttribute("transactions", list);
-		System.out.println("fajisd");
 		RequestDispatcher dispatcher1 = request.getRequestDispatcher("show_jstl.jsp");
 		dispatcher1.forward(request, response);
 	}
