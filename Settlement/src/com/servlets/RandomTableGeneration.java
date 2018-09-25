@@ -62,7 +62,7 @@ public class RandomTableGeneration extends HttpServlet {
 			   continue;
 		   else {
 			   //insert code here
-			   Transaction transaction= new com.beans.Transaction(String.valueOf(i),buyclmember,ransec, sellclmember, ranquantity, (float) ranprice);
+			   Transaction transaction= new com.beans.Transaction(i,buyclmember,ransec, sellclmember, ranquantity, (float) ranprice);
 				TransactionOperations dao= new TransactionOperationsImpl();
 				 dao.addTransaction(transaction);
 			   i++;

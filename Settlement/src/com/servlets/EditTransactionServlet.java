@@ -1,7 +1,7 @@
 package com.servlets;
 
 import java.io.IOException;
-import java.util.List;
+import java.io.PrintWriter;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,21 +12,20 @@ import javax.servlet.http.HttpServletResponse;
 
 
 import com.beans.Transaction;
-
 import com.operations.TransactionOperations;
 import com.operations.impl.TransactionOperationsImpl;
 
 /**
- * Servlet implementation class DeleteTransactionServlet
+ * Servlet implementation class EditTransactionServlet
  */
-@WebServlet("/deletetransaction")
-public class DeleteTransactionServlet extends HttpServlet {
+@WebServlet("/edittransaction")
+public class EditTransactionServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public DeleteTransactionServlet() {
+    public EditTransactionServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -38,11 +37,10 @@ public class DeleteTransactionServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		int transId= Integer.parseInt(request.getParameter("transId"));
-		TransactionOperations dao=new TransactionOperationsImpl();
-		dao.deleteTransaction(transId);
-		List<Transaction> list = dao.findAll();
-		request.setAttribute("transactions", list);
-		RequestDispatcher dispatcher1 = request.getRequestDispatcher("show_jstl.jsp");
+		TransactionOperations dao= new TransactionOperationsImpl();
+		Transaction trans= dao.findTransactionByID(transId);
+		request.setAttribute("transaction", trans);
+		RequestDispatcher dispatcher1 = request.getRequestDispatcher("Edittransaction.jsp");
 		dispatcher1.forward(request, response);
 		
 	}

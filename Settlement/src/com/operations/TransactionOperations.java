@@ -11,7 +11,9 @@ public interface TransactionOperations {
   List<Transaction> findTransactionByBuyer(String buyerCompanyId);
   List<Transaction> findTransactionBySeller(String sellerCompanyId);
   void addTransaction(Transaction transaction);
-  boolean deleteTransaction(String TransId);
+  boolean deleteTransaction(int TransId);
+  Transaction findTransactionByID(int TransID);
+  void updateTransaction(Transaction transaction);
   
  
 }

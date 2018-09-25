@@ -8,6 +8,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+ORIGINAL VALUES:<br>
 <table>
 <c:forEach var="transaction" items="${transactions }">
 <tr>
@@ -17,10 +18,19 @@
 <td><c:out value="${transaction.price}"></c:out></td>
 <td><c:out value="${transaction.buyerCompId}"></c:out></td>
 <td><c:out value="${transaction.sellerCompId}"></c:out></td>
-<td><a href="deletetransaction?transId=<c:out value='${transaction.transId }'/>">DELETE</a></td>
-<td><a href="edittransaction?transId=<c:out value='${transaction.transId }'/>">EDIT</a></td>
 </tr>
 </c:forEach>
 </table>
+PLEASE FILL THE NEW TRANSACTION DETAILS:
+<br>
+<form action="updatetraansaction" method="get">
+TRANSACTION ID<input type="text" name="transId"><br>
+NAME OF SECURITY: <input type="text" name="security"><br>
+QUANTITY: <input type="text" name="quantity"><br>
+PRICE:<input type="text" name="price"><br>
+BUYER CLEARING MEMBER:<input type="text" name="buyclearingmember"><br>
+SELLER CLEARING MEMBER:<input type="text" name="sellclearingmember"><br><br>
+<input type="submit" value="UPDATE TRANSACTION">
+</form>
 </body>
 </html>
