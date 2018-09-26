@@ -24,7 +24,7 @@ public class ImportData {
 			             HSSFWorkbook wb = new HSSFWorkbook(fs);
 			             HSSFSheet sheet = wb.getSheetAt(0);
 			             Row row;
-			             for(int i=1; i<=sheet.getLastRowNum(); i++){
+			             for(int i=0; i<=sheet.getLastRowNum(); i++){
 			                 row = sheet.getRow(i);
 			                // int transId = (int) row.getCell(0).getNumericCellValue();
 			                 String transId = row.getCell(0).getStringCellValue();

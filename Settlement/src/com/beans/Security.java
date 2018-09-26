@@ -5,6 +5,9 @@ public class Security {
 	private String securityName;
 	private float marketPrice;
 	private float borrowingRate;
+	public Security() {
+		
+	}
 	public Security(String securityId, String securityName, float marketPrice, float borrowingRate) {
 		super();
 		this.securityId = securityId;

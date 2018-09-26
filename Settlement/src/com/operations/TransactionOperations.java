@@ -10,5 +10,6 @@ public interface TransactionOperations {
   List<Transaction> findTransactionBySecurity(String securityId);
   List<Transaction> findTransactionByBuyer(String buyerCompanyId);
   List<Transaction> findTransactionBySeller(String sellerCompanyId);
+  void addTransaction(Transaction transaction);
  
 }

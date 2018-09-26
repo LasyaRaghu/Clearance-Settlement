@@ -44,6 +44,30 @@ public class SecurityOperationsImpl implements SecurityOperations {
 		
 	}
 
+	@Override
+	public Security getSecurityName(String securityId) {
+		// TODO Auto-generated method stub
+		Security sec = new Security();
+		String secName = "select * from Security where securityId=securityId";
+		try(Connection con =MyConnection.openConnection();) {
+			PreparedStatement ps= con.prepareStatement(secName);
+			ResultSet set = ps.executeQuery();
+			while(set.next())
+			{
+				String securityId1 = set.getString(1);
+				String securityName = set.getString("securityName");
+				float marketPrice =set.getFloat(3);
+				float borrowingRate =set.getFloat(4);
+				sec = new Security(securityId1, securityName, marketPrice, borrowingRate);
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return sec;
+	}
+
 	
 	
 

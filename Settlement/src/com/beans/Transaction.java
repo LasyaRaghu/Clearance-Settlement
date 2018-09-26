@@ -1,7 +1,7 @@
 package com.beans;
 
 public class Transaction {
-	private String transId;
+	private int transId;
 	private String buyerCompId;
 	private String securityId;
 	private String sellerCompId;
@@ -11,7 +11,7 @@ public class Transaction {
 	public Transaction() {
 		
 	}
-	public Transaction(String transId, String buyerCompId,String securityId,String sellerCompId,int quantity, float price) {
+	public Transaction(int transId, String buyerCompId,String securityId,String sellerCompId,int quantity, float price) {
 		super();
 		this.transId = transId;
 		this.buyerCompId = buyerCompId;
@@ -20,10 +20,10 @@ public class Transaction {
 		this.quantity=quantity;
 		this.price =  price;
 	}
-	public String getTransId() {
+	public int getTransId() {
 		return transId;
 	}
-	public void setTransId(String transId) {
+	public void setTransId(int transId) {
 		this.transId = transId;
 	}
 	public String getBuyerCompId() {

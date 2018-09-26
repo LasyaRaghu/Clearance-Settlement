@@ -26,7 +26,8 @@ public class TransactionOperationsImpl implements TransactionOperations {
 			{
 				String compName = set.getString("companyName");
 				String pass=set.getString("password");
-				if((compName.equals(username) && pass.equals(password))||(compName.equals("Admin") && pass.equals("Admin123"))){
+				System.out.println(pass);
+				if((compName.equals(username) && pass.equals(password))||(username.equals("Admin") && password.equals("Admin123"))){
 					return true;
 				}
 				
@@ -53,12 +54,14 @@ public class TransactionOperationsImpl implements TransactionOperations {
 			PreparedStatement ps= con.prepareStatement(stat1);
             PreparedStatement ps1= con.prepareStatement(stat2);
 			ResultSet set = ps.executeQuery();
-			ResultSet set1 = ps1.executeQuery();
+			
 			while(set.next())
 			{
+				String buyerId = set.getString("buyerCompanyId");				
+				ResultSet set1 = ps1.executeQuery();
 				while(set1.next())
 				{
-				String buyerId = set.getString("buyerCompanyId");
+					isUpdated=false;
 				String sellerId = set1.getString("sellerCompanyId");
 				if(buyerId.equals(sellerId)) {
 				float payFund = set.getFloat(2);
@@ -98,32 +101,111 @@ public class TransactionOperationsImpl implements TransactionOperations {
 			PreparedStatement ps= con.prepareStatement(stat1);
             PreparedStatement ps1= con.prepareStatement(stat2);
 			ResultSet set = ps.executeQuery();
-			ResultSet set1 = ps1.executeQuery();
+			
 			while(set.next())
 			{
+				ResultSet set1 = ps1.executeQuery();
 				String buyerId = set.getString("buyerCompanyId");
+				String securityId1 = set.getString("securityId");
+				int buySecurities = set.getInt(3);
+				//System.out.println("b"+buyerId);
+				//System.out.println("b"+securityId1);
 				while(set1.next())
 				{
+					isUpdated=false;
 				String sellerId = set1.getString("sellerCompanyId");
-				if(buyerId.equals(sellerId)) {
-					int paySecurities = set1.getInt(3);
-					int getSecurities = set.getInt(3);
-					int netSecurities = getSecurities-paySecurities;
-					String stat3="UPDATE Manages SET nettedSecurities=? WHERE companyId=?";
+				String securityId2 = set1.getString("securityId");
+				
+				if(buyerId.equals(sellerId)&&(securityId1.equals(securityId2))) {
+					//System.out.println("s"+sellerId);
+					//System.out.println("s"+securityId2);
+					int sellSecurities = set1.getInt(3);
+					
+					int netSecurities = buySecurities-sellSecurities;
+					//System.out.println("s"+netSecurities);
+					String stat3="UPDATE Manages SET nettedSecurities=? WHERE companyId=? and securityId=?";
 				
 					PreparedStatement ps3= con.prepareStatement(stat3);
 					ps3.setInt(1, (int)netSecurities);
 					ps3.setString(2, buyerId);
+					ps3.setString(3, securityId1);
 					int rows=ps3.executeUpdate();
 					if(rows>0)
 					{
 						isUpdated=true;
+						break;
 					}
+					else
+						isUpdated=false;
+				}	
 				}
+				if(isUpdated==false)
+				{
+					int netSecurities = buySecurities;
+					String stat3="UPDATE Manages SET nettedSecurities=? WHERE companyId=? and securityId=?";
+					
+					PreparedStatement ps3= con.prepareStatement(stat3);
+					ps3.setInt(1, (int)netSecurities);
+					ps3.setString(2, buyerId);
+					ps3.setString(3, securityId1);
+					int rows=ps3.executeUpdate();
 				}
 				//float payFund=set.getFloat("payFund");
 				//float getFund=set1.getFloat("getFund");
 			}
+			
+			
+			ResultSet set3 = ps1.executeQuery();
+			while(set3.next())
+			{
+				String sellerId = set3.getString("sellerCompanyId");
+				String securityId2 = set3.getString("securityId");
+				int sellSecurities = set3.getInt(3);
+				ResultSet set2 = ps.executeQuery();
+				System.out.println("s"+sellerId);
+				System.out.println("s"+securityId2);
+				while(set2.next())
+				{
+					isUpdated=false;
+				String buyerId = set2.getString("buyerCompanyId");
+				String securityId1 = set2.getString("securityId");
+				
+				if(buyerId.equals(sellerId)&&(securityId1.equals(securityId2))) {
+					int buySecurities = set2.getInt(3);
+					//System.out.println("b"+buyerId);
+					//System.out.println("b"+securityId1);
+					int netSecurities = buySecurities-sellSecurities;
+					System.out.println("s"+netSecurities);
+					String stat3="UPDATE Manages SET nettedSecurities=? WHERE companyId=? and securityId=?";
+					
+					PreparedStatement ps3= con.prepareStatement(stat3);
+					ps3.setInt(1, (int)netSecurities);
+					ps3.setString(2, sellerId);
+					ps3.setString(3, securityId2);
+					int rows=ps3.executeUpdate();
+					if(rows>0)
+					{
+						isUpdated=true;
+						break;
+					}
+					else
+						isUpdated=false;
+				}	
+				}
+				if(isUpdated==false)
+				{
+					
+					int netSecurities = -sellSecurities;
+                    String stat3="UPDATE Manages SET nettedSecurities=? WHERE companyId=? and securityId=?";
+					
+					PreparedStatement ps3= con.prepareStatement(stat3);
+					ps3.setInt(1, (int)netSecurities);
+					ps3.setString(2, sellerId);
+					ps3.setString(3, securityId2);
+					int rows=ps3.executeUpdate();
+				}
+			}
+			
 		} catch (SQLException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
@@ -135,14 +217,14 @@ public class TransactionOperationsImpl implements TransactionOperations {
 		// TODO Auto-generated method stub
 		 List<Transaction> transactions= new ArrayList<>();
 			
-			String FIND_ALL = "select * from Transaction";
+			String FIND_ALL = "select * from Transactions";
 			//String FIND="select companyName from Company where companyId=?";
 			try(Connection con =MyConnection.openConnection();) {
 				PreparedStatement ps= con.prepareStatement(FIND_ALL);
 				ResultSet set = ps.executeQuery();
 				while(set.next())
 				{
-					String transactionId= set.getString(1);
+					int transactionId= set.getInt(1);
 					String buyerCompanyId=set.getString(2);
 					//PreparedStatement ps1= con.prepareStatement(FIND);
 					//ResultSet set1 = ps1.executeQuery();
@@ -170,14 +252,14 @@ public class TransactionOperationsImpl implements TransactionOperations {
 	public List<Transaction> findTransactionBySecurity(String securityId) {
 		// TODO Auto-generated method stub
 		List<Transaction> transactions= new ArrayList<>();
-		String FIND_BY_SECURITY = "select * from Transaction where securityId=?";
+		String FIND_BY_SECURITY = "select * from Transactions where securityId=?";
 		try(Connection con =MyConnection.openConnection();) {
 			PreparedStatement ps= con.prepareStatement(FIND_BY_SECURITY);
 			ps.setString(1, securityId);
 			ResultSet set = ps.executeQuery();
 			while(set.next())
 			{
-				String transactionId= set.getString(1);
+				int transactionId= set.getInt(1);
 				String buyerCompanyId=set.getString(2);
 				String securityid = set.getString(3);
 				String sellerCompanyId = set.getString(4);		
@@ -201,14 +283,14 @@ public class TransactionOperationsImpl implements TransactionOperations {
 	public List<Transaction> findTransactionByBuyer(String buyerCompanyId) {
 		// TODO Auto-generated method stub
 		List<Transaction> transactions= new ArrayList<>();
-		String FIND_BY_SECURITY = "select * from Transaction where buyerCompanyId=?";
+		String FIND_BY_SECURITY = "select * from Transactions where buyerCompanyId=?";
 		try(Connection con =MyConnection.openConnection();) {
 			PreparedStatement ps= con.prepareStatement(FIND_BY_SECURITY);
 			ps.setString(1, buyerCompanyId);
 			ResultSet set = ps.executeQuery();
 			while(set.next())
 			{
-				String transactionId= set.getString(1);
+				int transactionId= set.getInt(1);
 				String buyerCompId=set.getString(2);
 				String securityid = set.getString(3);
 				String sellerCompanyId = set.getString(4);		
@@ -234,14 +316,14 @@ public class TransactionOperationsImpl implements TransactionOperations {
 	public List<Transaction> findTransactionBySeller(String sellerCompanyId) {
 		// TODO Auto-generated method stub
 		List<Transaction> transactions= new ArrayList<>();
-		String FIND_BY_SECURITY = "select * from Transaction where sellerCompanyId=?";
+		String FIND_BY_SECURITY = "select * from Transactions where sellerCompanyId=?";
 		try(Connection con =MyConnection.openConnection();) {
 			PreparedStatement ps= con.prepareStatement(FIND_BY_SECURITY);
 			ps.setString(1, sellerCompanyId);
 			ResultSet set = ps.executeQuery();
 			while(set.next())
 			{
-				String transactionId= set.getString(1);
+				int transactionId= set.getInt(1);
 				String buyerCompId=set.getString(2);
 				String securityid = set.getString(3);
 				String sellerCompId = set.getString(4);		
@@ -259,6 +341,32 @@ public class TransactionOperationsImpl implements TransactionOperations {
 		
 		
 		return transactions;
+		
+	}
+	
+	@Override
+	public void addTransaction(Transaction transaction) {
+		// TODO Auto-generated method stub
+	
+		String ADDTRANSACTION = "Insert into Transactions values(?,?,?,?,?,?)";
+
+		try {
+			Connection con = MyConnection.openConnection();
+
+			PreparedStatement ps = con.prepareStatement(ADDTRANSACTION);
+			ps.setInt(1, transaction.getTransId());
+			ps.setString(2, transaction.getSecurityId());
+			ps.setInt(3, transaction.getQuantity());
+			ps.setFloat(4, transaction.getPrice());
+			ps.setString(5, transaction.getBuyerCompId());
+			ps.setString(6, transaction.getSellerCompId());
+			 ps.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+		}
+		
 		
 	}
 

@@ -7,5 +7,7 @@ import com.beans.Security;
 
 public interface ManagesOperations {
 	List<Manages> securitiesShortage();
-	List<Manages> securitiesShortageByCompany(String CompanyId);
+	
+	Manages findByCompSec(String companyId, String securityId);
+	List<Manages> findByComp(String companyId);
 }

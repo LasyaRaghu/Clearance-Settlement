@@ -7,6 +7,6 @@ import com.beans.Security;
 public interface SecurityOperations {
 	 List<Security> displayBorrowingRate();
 	 
-	 // Security displayBorrowingRateBySecurity(String securityId);
+	 Security getSecurityName(String securityId);
 
 }
