@@ -26,8 +26,7 @@ public class ImportData {
 			             Row row;
 			             for(int i=0; i<=sheet.getLastRowNum(); i++){
 			                 row = sheet.getRow(i);
-			                // int transId = (int) row.getCell(0).getNumericCellValue();
-			                 String transId = row.getCell(0).getStringCellValue();
+			                 int transId = (int) row.getCell(0).getNumericCellValue();
 			                 String buyerCompId = row.getCell(4).getStringCellValue();
 			                 String securityId = row.getCell(1).getStringCellValue();
 			                 String sellerCompId = row.getCell(5).getStringCellValue();

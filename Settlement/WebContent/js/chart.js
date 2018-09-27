@@ -3,6 +3,28 @@ $(function() {
    * -------
    * Data and config for chartjs
    */
+	var mysql = require('mysql');
+
+	var con = mysql.createConnection({
+	  host: "localhost",
+	  user: "sa",
+	  password: "sa123",
+	  database: "Settlement"
+	});
+
+	con.connect(function(err) {
+		  if (err) throw err;
+		  con.query("SELECT securityId , quantity*price as amount ,buyerCompanyId FROM Transactions GROUP BY buyerCompanyId , securityId", function (err, result, fields) {
+		    if (err) throw err;
+
+		  });
+		});
+	var i=0;
+	var val = new Array(5);
+	while(!result.done){
+		 val[i]=result.value();
+	    result.next();	
+	}
   'use strict';
   var data = {
     labels: ["2013", "2014", "2014", "2015", "2016", "2017"],
@@ -80,7 +102,7 @@ $(function() {
   };
   var doughnutPieData = {
     datasets: [{
-      data: [30, 40, 30],
+      data: [val[0], val[1], val[2], val[3], val[4]],
       backgroundColor: [
         'rgba(255, 99, 132, 0.5)',
         'rgba(54, 162, 235, 0.5)',

@@ -348,18 +348,18 @@ public class TransactionOperationsImpl implements TransactionOperations {
 	public void addTransaction(Transaction transaction) {
 		// TODO Auto-generated method stub
 	
-		String ADDTRANSACTION = "Insert into Transactions values(?,?,?,?,?,?)";
+		String ADDTRANSACTION = "Insert into TRANSACTIONS values(?,?,?,?,?,?)";
 
 		try {
 			Connection con = MyConnection.openConnection();
 
 			PreparedStatement ps = con.prepareStatement(ADDTRANSACTION);
 			ps.setInt(1, transaction.getTransId());
-			ps.setString(2, transaction.getSecurityId());
-			ps.setInt(3, transaction.getQuantity());
-			ps.setFloat(4, transaction.getPrice());
-			ps.setString(5, transaction.getBuyerCompId());
-			ps.setString(6, transaction.getSellerCompId());
+			ps.setString(3, transaction.getSecurityId());
+			ps.setInt(5, transaction.getQuantity());
+			ps.setFloat(6, transaction.getPrice());
+			ps.setString(2, transaction.getBuyerCompId());
+			ps.setString(4, transaction.getSellerCompId());
 			 ps.executeUpdate();
 
 		} catch (SQLException e) {
@@ -369,6 +369,75 @@ public class TransactionOperationsImpl implements TransactionOperations {
 		
 		
 	}
+
+	@Override
+	public boolean deleteTransaction(int TransId) {
+		// TODO Auto-generated method stub
+		String DELETETRANSACTION="DELETE FROM TRANSACTIONS WHERE transactionId=?";
+		
+		Connection con= MyConnection.openConnection();
+		try {
+			PreparedStatement ps= con.prepareStatement(DELETETRANSACTION);
+			ps.setInt(1, TransId);
+			 ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+
+	@Override
+	public Transaction findTransactionByID(int TransID) {
+		// TODO Auto-generated method stub
+	String FINDBYID="select * from transactions where transactionId=?";
+	Transaction transaction = new Transaction();
+	Connection con= MyConnection.openConnection();
+	try {
+		PreparedStatement ps= con.prepareStatement(FINDBYID);
+		ps.setInt(1, TransID);
+		ResultSet set=ps.executeQuery();
+		int transId= set.getInt(1);
+		String buyerId= set.getString(2);
+		String security= set.getString(3);
+		String sellerId= set.getString(4);
+		int quantity= set.getInt(5);
+		float price= set.getFloat(6);
+		 transaction= new Transaction(transId, buyerId, security, sellerId,quantity, price);
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+		return transaction;
+	}
+
+	@Override
+	public void updateTransaction(Transaction transaction) {
+		// TODO Auto-generated method stub
+		String UPDATETRANSACTION = "update TRANSACTIONS set buyerCompanyId=?,securityId=?,sellerCompanyId=?,quantity=?,price=? where transactionId=?";
+
+		try {
+			Connection con = MyConnection.openConnection();
+
+			PreparedStatement ps = con.prepareStatement(UPDATETRANSACTION);
+			ps.setInt(6, transaction.getTransId());
+			ps.setString(2, transaction.getSecurityId());
+			ps.setInt(4, transaction.getQuantity());
+			ps.setFloat(5, transaction.getPrice());
+			ps.setString(1, transaction.getBuyerCompId());
+			ps.setString(3, transaction.getSellerCompId());
+			 ps.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+		}
+		
+		
+	}
+
+
 
 
 	
